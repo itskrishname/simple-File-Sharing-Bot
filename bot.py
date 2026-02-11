@@ -62,6 +62,18 @@ class Bot(Client):
             self.LOGGER(__name__).warning(e)
             self.LOGGER(__name__).warning(f"Make Sure bot is Admin in DB Channel, and Double check the CHANNEL_ID Value, Current Value {CHANNEL_ID}")
             self.LOGGER(__name__).info("\nBot Stopped. Join https://t.me/SECRECT_BOT_UPDATES for support")
+
+            self.LOGGER(__name__).info("Trying to list all chats the bot is a member of:")
+            try:
+                async for dialog in self.get_dialogs():
+                    chat_name = dialog.chat.title or dialog.chat.first_name
+                    self.LOGGER(__name__).info(f"Found Chat: Title={chat_name}, ID={dialog.chat.id}, Type={dialog.chat.type}")
+            except Exception as dialog_e:
+                self.LOGGER(__name__).warning(f"Failed to list dialogs: {dialog_e}")
+
+            if CHANNEL_ID == -1003437775732:
+                self.LOGGER(__name__).warning("WARNING: You are using the default CHANNEL_ID (-1003437775732). You must set the CHANNEL_ID environment variable to your own channel's ID.")
+
             sys.exit()
 
         self.set_parse_mode(ParseMode.HTML)
